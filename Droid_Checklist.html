@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortnite Droid Build Checklist</title>
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/hogira');
+    @import url('https://fonts.cdnfonts.com/css/baz-2');
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Hogira", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header-banner {
+            display: block;
+            width: 300px;
+            height: auto;
+            margin: 0 auto 15px auto;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #111;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .top-controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .sort-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease;
+        }
+        .sort-btn:hover { background-color: #5a6268; }
+        .sort-btn.sort-active { background-color: #17a2b8; }
+        .sort-btn.sort-active:hover { background-color: #138496; }
+
+        /* --- Recipe Ingredient Filter Panel Styles --- */
+        .ingredient-filter-panel {
+            background: #1e232a;
+            border: 1px solid #343a40;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .ingredient-filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #f8f9fa;
+        }
+        .ingredient-filter-title {
+            letter-spacing: 1px;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #00d2ff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .clear-ingredients-btn {
+            background-color: #343a40;
+            color: #ced4da;
+            border: 1px solid #495057;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+        .clear-ingredients-btn:hover {
+            background-color: #495057;
+            color: #fff;
+        }
+        .ingredient-chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .ingredient-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #2b3038;
+            color: #e9ecef;
+            border: 1px solid #495057;
+            padding: 4px 10px 4px 6px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'baz', sans-serif;
+            letter-spacing: 1px;
+            font-size: 1.3em;
+            font-weight: 600;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .ingredient-chip:hover {
+            background: #3a414d;
+            border-color: #00d2ff;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .ingredient-chip.active {
+            background: linear-gradient(135deg, #0056b3 0%, #00d2ff 100%);
+            color: #ffffff;
+            border-color: #00d2ff;
+            box-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        }
+        .ingredient-chip-img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.3);
+            padding: 1px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 20px;
+            table-layout: fixed; 
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 4px;
+            text-align: center;
+        }
+        
+        thead th {
+            border: 1px solid #ddd;
+        }
+        thead tr {
+            box-shadow: none !important;
+        }
+
+        th {
+            background-color: #0056b3;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+            white-space: nowrap; 
+        }
+        
+        .stats-row th {
+            background-color: transparent; 
+            border: 1px solid transparent; 
+            border-bottom: 1px solid #ddd; 
+            text-shadow: none;
+            padding: 5px 0 10px 0;
+        }
+        .header-stats {
+            display: block;
+            font-size: 0.8em; 
+            font-weight: 600;
+            color: #111; 
+            letter-spacing: 0.5px;
+        }
+
+        .header-title {
+            position: relative;
+            z-index: 2;
+            display: block;
+        }
+
+        /* --- Static Column Styles --- */
+        th.th-default, .col-default { 
+            background: 
+                linear-gradient(105deg, rgba(255,255,255,0) 20%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 80%),
+                linear-gradient(135deg, #5c6670 0%, #838e96 40%, #464f57 100%);
+        }
+
+        th.th-gold, .col-gold { 
+            position: relative;
+            background: 
+                linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.4) 25%, rgba(255, 255, 255, 0.9) 30%, rgba(255, 255, 255, 0.2) 35%, transparent 50%),
+                linear-gradient(135deg, #7a3a00 0%, #b86e00 20%, #ffc800 45%, #ffea80 50%, #ffb800 65%, #995c00 85%, #522800 100%);
+            background-size: 100% 100%;
+        }
+
+        th.th-diamond, .col-diamond { 
+            position: relative;
+            background: 
+                linear-gradient(135deg, transparent 25%, rgba(176, 242, 255, 0.08) 25%, rgba(176, 242, 255, 0.08) 50%, transparent 50%),
+                linear-gradient(45deg, transparent 25%, rgba(176, 242, 255, 0.08) 25%, rgba(176, 242, 255, 0.08) 50%, transparent 50%),
+                linear-gradient(135deg, #b0f2ff 0%, #29c9f5 35%, #076dec 75%, #03216b 100%);
+            background-size: 20px 20px, 20px 20px, auto;
+        }
+
+        th.th-rainbow, .col-rainbow { 
+            background: 
+                linear-gradient(105deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.5) 45%, rgba(255,255,255,0) 60%),
+                linear-gradient(135deg, #ff4e50, #f9d423, #a8ff78, #1fd1f9, #b388eb, #ff4e50); 
+            background-size: 100% 100%;
+        }
+
+        th.th-beskar, .col-beskar { 
+            background: 
+                linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 3px),
+                linear-gradient(135deg, #383838 0%, #a3a3a3 20%, #424242 40%, #b5b5b5 60%, #2b2b2b 80%, #858585 100%); 
+            background-size: 100% 100%;
+        }
+
+        th.th-galactic, .col-galactic { 
+            position: relative;
+            background: 
+                radial-gradient(1.5px 1.5px at 20% 30%, #ffffff 100%, transparent),
+                radial-gradient(1px 1px at 70% 60%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 40% 80%, #ffffff 100%, transparent),
+                radial-gradient(1.5px 1.5px at 80% 10%, #ffffff 100%, transparent),
+                linear-gradient(135deg, #0b051a 0%, #2d1657 40%, #150936 70%, #421045 100%);
+            background-size: 60px 60px, 80px 80px, 100px 100px, 70px 70px, 100% 100%;
+        }
+
+        th.th-stellar, .col-stellar {
+            position: relative;
+            background: 
+                radial-gradient(3px 3px at 45% 25%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 50% 55%, #fffdf0 100%, transparent),
+                radial-gradient(2.5px 2.5px at 30% 15%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 68% 28%, #fffae0 100%, transparent),
+                radial-gradient(1px 1px at 15% 35%, #ffe6a3 100%, transparent),
+                radial-gradient(1px 1px at 85% 65%, #ffd480 100%, transparent),
+                radial-gradient(ellipse 70% 40% at 50% 50%, rgba(255, 235, 170, 0.85) 0%, rgba(240, 175, 60, 0.5) 30%, transparent 70%),
+                radial-gradient(ellipse 50% 80% at 30% 40%, rgba(255, 190, 80, 0.7) 0%, rgba(185, 95, 20, 0.4) 45%, transparent 75%),
+                radial-gradient(ellipse 80% 30% at 70% 60%, rgba(255, 215, 110, 0.6) 0%, rgba(160, 75, 15, 0.35) 50%, transparent 80%),
+                linear-gradient(145deg, rgba(255, 225, 150, 0.6) 0%, rgba(215, 135, 40, 0.7) 25%, rgba(95, 45, 10, 0.8) 55%, rgba(20, 10, 5, 0.95) 85%),
+                linear-gradient(35deg, rgba(15, 8, 4, 0.95) 0%, rgba(160, 75, 15, 0.5) 45%, rgba(255, 235, 170, 0.6) 70%, rgba(35, 15, 5, 0.9) 100%),
+                #0d0805;
+            background-size: 90px 90px, 110px 110px, 80px 80px, 120px 120px, 40px 40px, 60px 60px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+        }
+
+        th.th-kyber, .col-kyber {
+            position: relative;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.5) 0%, transparent 40%),
+                radial-gradient(circle at 85% 25%, rgba(50, 255, 126, 0.45) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 120, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(170, 0, 255, 0.5) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(255, 230, 0, 0.4) 0%, transparent 40%),
+                linear-gradient(135deg, #10122e 0%, #1a0826 35%, #29081e 70%, #051d20 100%);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.25);
+        }
+
+        .completed-header-bg th { background: #28a745 !important; }
+        
+        .filter-header { cursor: pointer; user-select: none; transition: opacity 0.2s ease; }
+        .filter-header:hover { opacity: 0.85; }
+        .filter-active { box-shadow: inset 0 -4px 0 rgba(255, 255, 255, 0.8); text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+        .filter-active::after { content: ' 🔍'; font-size: 0.8em; position: absolute; top: 5px; right: 5px;}
+
+        /* Card Spacer */
+        .card-spacer td {
+            height: 16px;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        tr.main-droid-row td:first-child { border-top-left-radius: 8px; }
+        tr.main-droid-row td:last-child { border-top-right-radius: 8px; }
+
+        tr.main-droid-row:not(.has-fusion) td,
+        tr.main-droid-row.fusion-hidden td {
+            box-shadow: 0 8px 10px -3px rgba(0, 0, 0, 0.3) !important;
+            border-bottom: 1px solid #ddd !important;
+        }
+        tr.main-droid-row:not(.has-fusion) td:first-child,
+        tr.main-droid-row.fusion-hidden td:first-child { 
+            border-bottom-left-radius: 8px !important; 
+        }
+        tr.main-droid-row:not(.has-fusion) td:last-child,
+        tr.main-droid-row.fusion-hidden td:last-child { 
+            border-bottom-right-radius: 8px !important; 
+        }
+
+        tr.main-droid-row.has-fusion td {
+            border-bottom: none !important; 
+            box-shadow: none !important; 
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+        }
+
+        .fusion-row td {
+            background-color: #d4d4d4 !important;
+            border-top: none !important;
+            border-bottom: 1px solid #bbb;
+            border-left: 1px solid #bbb;
+            border-right: 1px solid #bbb;
+            padding: 6px 12px 10px 12px;
+            text-align: center;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 8px 10px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .fusion-recipe-text {
+            display: inline-block;
+            font-size: 1.3em;
+            color: #111;
+            font-family: 'baz', sans-serif; letter-spacing: 1px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .recipe-mini-img {
+            width: 28px;
+            height: 28px;
+            vertical-align: middle;
+            border-radius: 4px;
+            margin: 0 4px 0 6px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.5));
+        }
+
+        /* --- Droid Name & Type Styles --- */
+        td.droid-name-cell { 
+            text-align: left; font-weight: bold; background-color: transparent; 
+            color: #111; transition: background-color 0.2s ease, color 0.2s ease; 
+            position: relative; overflow: hidden; 
+        }
+        td.droid-name-cell:hover { z-index: 999; }
+        .droid-name-wrapper { display: flex; align-items: center; white-space: nowrap; position: relative; z-index: 1; overflow: hidden; text-overflow: ellipsis; }
+        .droid-name-text { font-family: 'baz', sans-serif; letter-spacing: 1px; font-size: 1.4em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        
+        .droid-meta-container {
+            display: flex;
+            align-items: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .type-icon {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
+            margin-right: 8px;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+        }
+        
+        .badges-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .rarity-badge { 
+            display: inline-block; 
+            width: 75px; 
+            padding: 3px 0; 
+            border-radius: 4px; 
+            flex-shrink: 0; 
+            text-align: center; 
+            font-size: 0.65em; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            border: 1px solid rgba(0,0,0,0.3); 
+            box-shadow: inset 0 0 4px rgba(255,255,255,0.3); 
+            color: white; 
+            text-shadow: 0 2px 3px rgba(0,0,0,0.8); 
+        }
+        .rarity-Common { background-color: #8c8c8c; } 
+        .rarity-Rare { background-color: #32e6ff; } 
+        .rarity-Epic { background-color: #9b62ff; } 
+        .rarity-Legendary { background-color: #ffa12b; } 
+        .rarity-Mythic { background-color: #ff32b6; } 
+        .rarity-Iconic { background-color: #ffe16d; } 
+
+        .droid-photo { 
+            width: 40px; height: 40px; border-radius: 4px; margin-right: 8px; object-fit: contain; 
+            flex-shrink: 0; cursor: pointer; filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)); 
+            transition: transform 0.2s ease, filter 0.2s ease; position: relative; z-index: 10;
+        }
+        .droid-photo:hover { transform: scale(2.2); filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1)); z-index: 1000; }
+
+        /* --- Hover Popup Container Styles --- */
+        .variant-hover-container { 
+            position: absolute; 
+            bottom: 110%; 
+            left: 50%; 
+            width: 360px; 
+            height: 360px; 
+            border-radius: 12px; 
+            z-index: 100; 
+            opacity: 0; 
+            visibility: hidden; 
+            pointer-events: none; 
+            transform: translateX(-50%) translateY(10px); 
+            transition: all 0.2s ease; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            padding: 16px; 
+            box-sizing: border-box; 
+            border: 20px solid #666; 
+            box-shadow: 0 12px 28px rgba(0,0,0,0.85); 
+        }
+        .checkbox-container:hover .variant-hover-container,
+        .kyber-sub-item:hover .variant-hover-container { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+
+        .variant-hover-container.col-default { background: linear-gradient(135deg, #5c6670 0%, #838e96 40%, #464f57 100%); }
+        .variant-hover-container.col-gold { background: linear-gradient(135deg, #7a3a00 0%, #b86e00 20%, #ffc800 45%, #ffea80 50%, #ffb800 65%, #995c00 85%, #522800 100%); }
+        .variant-hover-container.col-diamond { 
+            background: 
+                linear-gradient(135deg, transparent 25%, rgba(176, 242, 255, 0.08) 25%, rgba(176, 242, 255, 0.08) 50%, transparent 50%),
+                linear-gradient(45deg, transparent 25%, rgba(176, 242, 255, 0.08) 25%, rgba(176, 242, 255, 0.08) 50%, transparent 50%),
+                linear-gradient(135deg, #b0f2ff 0%, #29c9f5 35%, #076dec 75%, #03216b 100%);
+            background-size: 20px 20px, 20px 20px, auto;
+        }
+        .variant-hover-container.col-rainbow { background: linear-gradient(135deg, #ff4e50, #f9d423, #a8ff78, #1fd1f9, #b388eb, #ff4e50); }
+        .variant-hover-container.col-beskar { background: linear-gradient(135deg, #383838 0%, #a3a3a3 20%, #424242 40%, #b5b5b5 60%, #2b2b2b 80%, #858585 100%); }
+        .variant-hover-container.col-galactic { 
+            background: 
+                radial-gradient(2px 2px at 15% 25%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 75% 65%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 40% 85%, #ffffff 100%, transparent),
+                linear-gradient(135deg, #0b051a 0%, #2d1657 40%, #150936 70%, #421045 100%);
+            background-size: 70px 70px, 90px 90px, 80px 80px, 100% 100%;
+        }
+        .variant-hover-container.col-stellar {
+            background: 
+                radial-gradient(3px 3px at 45% 25%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 50% 55%, #fffdf0 100%, transparent),
+                radial-gradient(2.5px 2.5px at 30% 15%, #ffffff 100%, transparent),
+                radial-gradient(2px 2px at 68% 28%, #fffae0 100%, transparent),
+                radial-gradient(1px 1px at 15% 35%, #ffe6a3 100%, transparent),
+                radial-gradient(1px 1px at 85% 65%, #ffd480 100%, transparent),
+                radial-gradient(ellipse 70% 40% at 50% 50%, rgba(255, 235, 170, 0.85) 0%, rgba(240, 175, 60, 0.5) 30%, transparent 70%),
+                radial-gradient(ellipse 50% 80% at 30% 40%, rgba(255, 190, 80, 0.7) 0%, rgba(185, 95, 20, 0.4) 45%, transparent 75%),
+                radial-gradient(ellipse 80% 30% at 70% 60%, rgba(255, 215, 110, 0.6) 0%, rgba(160, 75, 15, 0.35) 50%, transparent 80%),
+                linear-gradient(145deg, rgba(255, 225, 150, 0.6) 0%, rgba(215, 135, 40, 0.7) 25%, rgba(95, 45, 10, 0.8) 55%, rgba(20, 10, 5, 0.95) 85%),
+                linear-gradient(35deg, rgba(15, 8, 4, 0.95) 0%, rgba(160, 75, 15, 0.5) 45%, rgba(255, 235, 170, 0.6) 70%, rgba(35, 15, 5, 0.9) 100%),
+                #0d0805;
+            background-size: 90px 90px, 110px 110px, 80px 80px, 120px 120px, 40px 40px, 60px 60px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+        }
+        .variant-hover-container.col-kyber {
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(0, 240, 255, 0.5) 0%, transparent 40%),
+                radial-gradient(circle at 85% 25%, rgba(50, 255, 126, 0.45) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 120, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(170, 0, 255, 0.5) 0%, transparent 45%),
+                radial-gradient(circle at 80% 80%, rgba(255, 230, 0, 0.4) 0%, transparent 40%),
+                linear-gradient(135deg, #10122e 0%, #1a0826 35%, #29081e 70%, #051d20 100%);
+        }
+
+        .variant-hover-photo { width: 100%; flex: 1; min-height: 0; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1.5)); }
+
+        /* --- Precise Standardized Filters for Kyber Sub-Variants --- */
+        .kyber-filter-kyber {
+            filter: grayscale(100%) brightness(1.1) contrast(1.1) drop-shadow(0 0 12px rgba(220, 220, 220, 0.9));
+        }
+        .kyber-filter-kyber-green {
+            filter: grayscale(100%) sepia(100%) hue-rotate(85deg) saturate(600%) brightness(0.9) drop-shadow(0 0 15px rgba(50, 255, 126, 1));
+        }
+        .kyber-filter-kyber-blue {
+            filter: grayscale(100%) sepia(100%) hue-rotate(180deg) saturate(700%) brightness(0.95) drop-shadow(0 0 15px rgba(0, 180, 255, 1));
+        }
+        .kyber-filter-kyber-purple {
+            filter: grayscale(100%) sepia(100%) hue-rotate(240deg) saturate(600%) brightness(0.9) drop-shadow(0 0 15px rgba(180, 50, 255, 1));
+        }
+
+        .hover-recipe-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            width: 100%;
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,1), 0 0 8px rgba(255,255,255,0.2);
+            box-sizing: border-box;
+        }
+        .hover-recipe-img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1)) drop-shadow(0 0 2px rgba(255,255,255,0.8));
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 2px;
+        }
+        .hover-recipe-plus {
+            color: #fff;
+            font-weight: 900;
+            font-size: 1.5em;
+            text-shadow: 0 0 8px rgba(255,255,255,1), 0 0 4px rgba(255,255,255,0.8);
+        }
+
+        .image-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; }
+        .image-modal img { max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.9); background: black; padding: 10px; }
+
+        .sparkle-icon { cursor: pointer; filter: grayscale(100%); opacity: 0.4; margin-right: 8px; transition: all 0.2s ease; user-select: none; display: inline-block; }
+        .sparkle-icon.active { filter: brightness(0) invert(1) drop-shadow(0 0 4px white); opacity: 1; }
+
+        tr.row-flawless td.droid-name-cell { 
+            background: linear-gradient(115deg, #e6e6e6 0%, #cccccc 30%, #ffffff 50%, #cccccc 70%, #e6e6e6 100%) !important; 
+            background-size: 100% auto !important; 
+            color: #2b2b2b !important; 
+            --star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z'/%3E%3C/svg%3E");
+        }
+        tr.row-flawless td.droid-name-cell .droid-name-wrapper span:not(.rarity-badge) { color: #2b2b2b !important; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.8); }
+
+        tr.row-flawless td.droid-name-cell::before {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background-repeat: no-repeat; filter: drop-shadow(0 0 4px white);
+            background-image: var(--star), var(--star), var(--star), var(--star), var(--star), var(--star);
+            background-position: 5% 20%, 25% 85%, 45% 15%, 65% 75%, 85% 30%, 95% 85%;
+            background-size: 10px 10px, 14px 14px, 8px 8px, 16px 16px, 12px 12px, 15px 15px;
+            opacity: 0.8;
+        }
+
+        td.droid-name-cell.row-complete { background-color: #c3e6cb !important; color: #1e5631; }
+        .checkbox-cell { transition: background 0.2s ease; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); position: relative; }
+        .checkbox-cell:hover { z-index: 999; }
+        .checkbox-cell.checked-cell { background: #d4edda !important; color: #155724 !important; text-shadow: none; }
+        
+        .checkbox-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative; z-index: 2;}
+        
+        /* Multi-checkbox layout for Kyber Column */
+        .kyber-group-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: flex-start;
+            padding: 2px 4px;
+            font-size: 0.75em;
+        }
+        .kyber-sub-item {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+        .kyber-sub-item label {
+            font-size: 0.9em;
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        input[type="checkbox"] { margin-right: 4px; width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
+        label { cursor: pointer; user-select: none; font-size: 0.9em; white-space: nowrap; }
+        
+        .reset-btn { display: block; margin: 20px auto 0 auto; background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .reset-btn:hover { background-color: #bd2130; }
+
+        /* Custom Confirmation Modal */
+        .confirm-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .confirm-box { background: white; padding: 24px; border-radius: 8px; max-width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .confirm-actions { margin-top: 20px; display: flex; justify-content: center; gap: 12px; }
+        .confirm-btn { padding: 8px 16px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
+        .confirm-yes { background-color: #dc3545; color: white; }
+        .confirm-no { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <img class="header-banner" src="https://static.wikia.nocookie.net/star-wars-droid-tycoon/images/2/26/Main_Foto_-_Droid_Tycoon_Page.jpg/" alt="Droid Tycoon Banner">
+    <h1>Droid Build Checklist</h1>
+    <div class="subtitle">Progress auto-saves locally to your browser</div>
+
+    <div class="top-controls">
+        <button id="sort-toggle-btn" class="sort-btn" onclick="toggleSort()">🔤 Sort: Alphabetical</button>
+    </div>
+
+    <!-- Recipe Ingredient Filter Section -->
+    <div class="ingredient-filter-panel">
+        <div class="ingredient-filter-header">
+            <span class="ingredient-filter-title">🛠️ Filter by Recipe Ingredient:</span>
+            <button class="clear-ingredients-btn" onclick="clearIngredientFilters()">Clear Ingredient Filters</button>
+        </div>
+        <div id="ingredient-chips" class="ingredient-chips-container"></div>
+    </div>
+
+    <table>
+        <colgroup>
+            <col style="width: 32%;">
+            <col span="7" style="width: 8.5%;">
+            <col style="width: 8.5%;">
+        </colgroup>
+        <thead>
+            <tr class="stats-row">
+                <th><div id="stat-flawless" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-default" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-gold" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-diamond" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-rainbow" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-beskar" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-galactic" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-stellar" class="header-stats">0/0 (0%)</div></th>
+                <th><div id="stat-kyber" class="header-stats">0/0 (0%)</div></th>
+            </tr>
+            <tr class="title-row">
+                <th><span class="header-title">Droid Name</span></th>
+                <th class="th-default filter-header" onclick="toggleFilter('default')" title="Click to filter unchecked"><span class="header-title">Default</span></th>
+                <th class="th-gold filter-header" onclick="toggleFilter('gold')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Gold</span></th>
+                <th class="th-diamond filter-header" onclick="toggleFilter('diamond')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Diamond</span></th>
+                <th class="th-rainbow filter-header" onclick="toggleFilter('rainbow')" title="Click to filter unchecked"><span class="header-title">Rainbow</span></th>
+                <th class="th-beskar filter-header" onclick="toggleFilter('beskar')" title="Click to filter unchecked"><span class="header-title">Beskar</span></th>
+                <th class="th-galactic filter-header" onclick="toggleFilter('galactic')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Galactic</span></th>
+                <th class="th-stellar filter-header" onclick="toggleFilter('stellar')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Stellar</span></th>
+                <th class="th-kyber filter-header" onclick="toggleFilter('kyber')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Kyber</span></th>
+            </tr>
+            <tr class="card-spacer"><td colspan="9"></td></tr>
+        </thead>
+        <tbody id="checklist-table-body"></tbody>
+        <tbody id="completed-header" style="display: none;">
+            <tr class="card-spacer"><td colspan="9"></td></tr>
+            <tr class="section-header-row completed-header-bg">
+                <th colspan="9">Completed Droids</th>
+            </tr>
+            <tr class="card-spacer"><td colspan="9"></td></tr>
+        </tbody>
+        <tbody id="completed-table-body"></tbody>
+    </table>
+
+    <button class="reset-btn" onclick="openResetModal()">Clear All Progress</button>
+
+    <div id="imageModal" class="image-modal" onclick="closeModal()">
+        <img id="modalImage" src="" alt="Enlarged Droid Photo">
+    </div>
+
+    <!-- Custom Confirmation Dialog for Reset -->
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-box">
+            <h3>Clear All Progress?</h3>
+            <p>This action will uncheck all droids and cannot be undone.</p>
+            <div class="confirm-actions">
+                <button class="confirm-btn confirm-yes" onclick="confirmClearProgress()">Yes, Clear</button>
+                <button class="confirm-btn confirm-no" onclick="closeResetModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const droids = [
+            { name: "MOUSE", type: "Worker", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/Mouse_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Mouse_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Mouse__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Mouse__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Mouse__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_MSE_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_MSE_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Mouse.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/MOUSE_Kyber.png" } },
+            { name: "PIT", type: "Worker", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/Pit_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Pit_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Pit__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Pit__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Pit__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_PitDroid_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_PitDroid_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Pit.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/PIT_Kyber.png" } },
+            { name: "GONK", type: "Worker", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/Gonk_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Gonk_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Gonk__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Gonk__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Gonk__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_GNK_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_GNK_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Gonk.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/GONK_Kyber.png" } },
+            { name: "CB", type: "Astromech", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/CB_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/CB_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/CB__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/CB__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/CB__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_CB_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_CB_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/CB.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/CB_Kyber.png" } },
+            { name: "R3", type: "Astromech", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/R3_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R3_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R3__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R3__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R3__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R3_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R3_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R3.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R3_Kyber.png" } },
+            { name: "R5", type: "Astromech", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/R5_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R5_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R5__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R5__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R5__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R5_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R5_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R5.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R5_Kyber.png" } },
+            { name: "R8", type: "Astromech", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/R8_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R8_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R8__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R8__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R8__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R8_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R8_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R8.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R8_Kyber.png" } },
+            { name: "IMPERIAL PROBE", type: "Battle", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/Imperial_Probe_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Imperial_Probe_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Imperial_Probe__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Imperial_Probe__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Imperial_Probe__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_ViperProbe_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_ViperProbe_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Imperial_Probe.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/IMPERIAL_PROBE_Kyber.png" } },
+            { name: "B1 BATTLE", type: "Battle", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/B1_Battle_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B1_Battle_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B1_Battle__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B1_Battle__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B1_Battle__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B1Battle_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B1Battle_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B1_Battle.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B1_BATTLE_Kyber.png" } },
+            { name: "DRK-1 PROBE", type: "Battle", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/DRK-1_Probe_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/DRK-1_Probe_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/DRK-1_Probe__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/DRK-1_Probe__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/DRK-1_Probe__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_DRK1_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_DRK1_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/DRK-1_Probe.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/DRK-1_PROBE_Kyber.png" } },
+            { name: "ID10", type: "Battle", rarity: "Common", image: "https://droidarchives.co.uk/assets/droids/ID10_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/ID10_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/ID10__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/ID10__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/ID10__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_ID10_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_ID10_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/ID10.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ID10_Kyber.png" } },
+            { name: "BDX EXPLORER", type: "Worker", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/BDX_Explorer_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/BDX_Explorer_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/BDX_Explorer__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/BDX_Explorer__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/BDX_Explorer__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_BDX_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_BDX_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/BDX_Explorer.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/BDX_EXPLORER_Kyber.png" } },
+            { name: "ARG", type: "Worker", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/ARG_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/ARG_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/ARG__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/ARG__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/ARG__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_ARG19_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_ARG19_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/ARG.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ARG_Kyber.png" } },
+            { name: "SENATE HOVERCAM", type: "Worker", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/Senate_Hovercam_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Senate_Hovercam_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Senate_Hovercam__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Senate_Hovercam__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Senate_Hovercam__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_SenateHovercam_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_SenateHovercam_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Senate_Hovercam.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/SENATE_HOVERCAM_Kyber.png" } },
+            { name: "B-U4D", type: "Worker", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/B-U4D_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B-U4D_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B-U4D__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B-U4D__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B-U4D__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_BR72_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_BR72_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B-U4D.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B-U4D_Kyber.png" } },
+            { name: "BAL-CORE", type: "Worker", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/BAL-Core_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/BAL-Core_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/BAL-Core__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/BAL-Core__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/BAL-Core__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo02_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo02_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Bal-Core.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/BAL-CORE_Kyber.png" } },
+            { name: "ROLL-R", type: "Worker", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/ROLL-R_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/ROLL-R_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/ROLL-R__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/ROLL-R__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/ROLL-R__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo12_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo12_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Roll-R.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ROLL-R_Kyber.png" } },
+            { name: "WHL-EX", type: "Worker", rarity: "Rare", recipe: "ARG + MOUSE + MOUSE", image: "https://droidarchives.co.uk/assets/droids/WHL-EX_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/WHL-EX_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion11_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion11_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion11_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion11_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion11_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion11_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/WHL-EX_Kyber.png" } },
+            { name: "2BB", type: "Astromech", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/2BB_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/2BB_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/2BB__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/2BB__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/2BB__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_2BB_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_2BB_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/2BB.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/2BB_Kyber.png" } },
+            { name: "A-LT", type: "Astromech", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/A-LT_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/A-LT_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/A-LT__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/A-LT__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/A-LT__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_ALT_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_ALT_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/A-LT.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/A-LT_Kyber.png" } },
+            { name: "R4", type: "Astromech", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/R4_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R4_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R4__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R4__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R4__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R4_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R4_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R4.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R4_Kyber.png" } },
+            { name: "R9", type: "Astromech", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/R9_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R9_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R9__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R9__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R9__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R9_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R9_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R9.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R9_Kyber.png" } },
+            { name: "ZRO-TEC", type: "Worker", rarity: "Rare", recipe: "ID10 + ID10 + 2BB", image: "https://droidarchives.co.uk/assets/droids/ZRO-TEC_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/ZRO-TEC_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion12_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion12_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion12_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion12_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion12_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion12_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ZRO-TEC_Kyber.png" } },
+            { name: "B1 SECURITY", type: "Battle", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/B1_Security_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B1_Security_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B1_Security__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B1_Security__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B1_Security__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B1Security_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B1Security_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B1_Security.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B1_SECURITY_Kyber.png" } },
+            { name: "NAV-EX", type: "Battle", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/NAV-EX_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/NAV-EX_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/NAV-EX__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/NAV-EX__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/NAV-EX__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo01_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo01_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Nav-Ex.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/NAV-EX_Kyber.png" } },
+            { name: "VECT-ARM", type: "Battle", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/Vect-Arm_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Vect-Arm_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Vect-Arm__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Vect-Arm__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Vect-Arm__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo11_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo11_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Vect-ARM.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/VECT-ARM_Kyber.png" } },
+            { name: "HOV-R", type: "Battle", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/HOV-R_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/HOV-R_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/HOV-R__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/HOV-R__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/HOV-R__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo15_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo15_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Hov-R.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/HOV-R_Kyber.png" } },
+            { name: "BTL-R", type: "Battle", rarity: "Rare", recipe: "R9 + BDX EXPLORER + B1 BATTLE", image: "https://droidarchives.co.uk/assets/droids/BTL-R_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/BTL-R_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion17_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion17_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion17_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion17_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion17_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion17_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/BTL-R_Kyber.png" } },
+            { name: "SA-5", type: "Protocol", rarity: "Rare", image: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_SA5_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_SA5_Common.png", gold: "https://droidarchives.co.uk/assets/droids/protocol/SA-5_Gold_v2.png", diamond: "https://droidarchives.co.uk/assets/droids/protocol/SA-5_Diamond_v2.png", rainbow: "https://droidarchives.co.uk/assets/droids/protocol/SA-5_Rainbow_v2.png", beskar: "https://droidarchives.co.uk/assets/droids/protocol/SA-5_Beskar_v2.png", galactic: "https://droidarchives.co.uk/assets/droids/protocol/SA-5_Galactic_v2.png", stellar: "https://droidarchives.co.uk/assets/droids/protocol/SA-5_Stellar_v2.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/SA-5_Kyber.png" } },
+            { name: "GROUNDMECH", type: "Worker", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Groundmech_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Groundmech_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Groundmech__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Groundmech__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Groundmech__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B2_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B2_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Groundmech.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/GROUNDMECH_Kyber.png" } },
+            { name: "L0", type: "Worker", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/L0_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/L0_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/L0_-_Droid__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/L0_-_Droid__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/L0_-_Droid__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_L0_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_L0_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/LO.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LO_Kyber.png" } },
+            { name: "AMP WALKER", type: "Worker", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/AMP_Walker_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/AMP_Walker_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/AMP_Walker__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/AMP_Walker__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/AMP_Walker__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo05_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo05_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Amp_Walker.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/AMP_WALKER_Kyber.png" } },
+            { name: "SEN-TRI", type: "Worker", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/SEN-TRI_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/SEN-TRI_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/SEN-TRI__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/SEN-TRI__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/SEN-TRI__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo17_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo17_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Sen-Tri.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/SEN-TRI_Kyber.png" } },
+            { name: "OPTI-POD", type: "Worker", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Opti-Pod_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Opti-Pod_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Opti-Pod__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Opti-Pod__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Opti-Pod__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo19_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo19_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Opti-Pod.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/OPTI-POD_Kyber.png" } },
+            { name: "GUNRUNNER", type: "Worker", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Gunrunner_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Gunrunner_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Gunrunner__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Gunrunner__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Gunrunner__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Smuggler_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Smuggler_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Gunrunner.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/GUNRUNNER_Kyber.png" } },
+            { name: "N-UL", type: "Worker", rarity: "Epic", recipe: "B1 HEAVY + GUNRUNNER + BB", image: "https://droidarchives.co.uk/assets/droids/N-UL_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/N-UL_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion014_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion014_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion014_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion014_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion014_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion014_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/N-UL_Kyber.png" } },
+            { name: "BB", type: "Astromech", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/BB_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/BB_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/BB__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/BB__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/BB__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_BB_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_BB_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/BB.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/BB_Kyber.png" } },
+            { name: "R2", type: "Astromech", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/R2_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R2_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R2__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R2__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R2__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R2_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R2_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R2.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R2_Kyber.png" } },
+            { name: "R6", type: "Astromech", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/R6_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R6_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R6__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R6__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R6__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R6_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R6_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R6.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R6_Kyber.png" } },
+            { name: "TRAK-R", type: "Astromech", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Trak-R_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Trak-R_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Trak-R__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Trak-R__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Trak-R__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_TrakR_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_TrakR_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Trak-R.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/TRAK-R_Kyber.png" } },
+            { name: "ORB-WALKER", type: "Astromech", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Orb-Walker_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Orb-Walker_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Orb-Walker__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Orb-Walker__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Orb-Walker__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_OrbWalker_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_OrbWalker_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Orb-Walker.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ORB-WALKER_Kyber.png" } },
+            { name: "UTIL-TEC", type: "Astromech", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Util-Tec_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Util-Tec_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Util-Tec__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Util-Tec__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Util-Tec__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo09_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo09_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Util-Tec.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/UTIL-TEC_Kyber.png" } },
+            { name: "SCRP-R", type: "Astromech", rarity: "Epic", recipe: "GONK + GROUNDMECH + R6", image: "https://droidarchives.co.uk/assets/droids/SCRP-R_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/SCRP-R_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion13_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion13_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion13_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion13_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion13_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion13_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/SCRP-R_Kyber.png" } },
+            { name: "B1 HEAVY", type: "Battle", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/B1_Heavy_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B1_Heavy_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B1_Heavy__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B1_Heavy__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B1_Heavy__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B1Heavy_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B1Heavy_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B1_Heavy.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B1_HEAVY_Kyber.png" } },
+            { name: "B2 SUPER", type: "Battle", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/B2_Super_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B2_Super_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B2_Super__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B2_Super__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B2_Super__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B2Super_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B2Super_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B2_Super.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B2_SUPER_Kyber.png" } },
+            { name: "B2 HEAVY", type: "Battle", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/B2_Heavy_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B2_Heavy_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B2_Heavy__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B2_Heavy__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B2_Heavy__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B2Heavy_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B2Heavy_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B2_Heavy.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B2_HEAVY_Kyber.png" } },
+            { name: "STRIKE-ORB", type: "Battle", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Strike-Orb_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Strike-Orb_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Strike-Orb__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Strike-Orb__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Strike-Orb__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo04_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo04_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Strike-Orb.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/STRIKE-ORB_Kyber.png" } },
+            { name: "HAUL-R", type: "Battle", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/Haul-R_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Haul-R_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Haul-R__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Haul-R__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Haul-R__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo13_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo13_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Haul-R.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/HAUL-R_Kyber.png" } },
+            { name: "LNG-SHOT", type: "Battle", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/LNG-Shot_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/LNG-Shot_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/LNG-Shot__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/LNG-Shot__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/LNG-Shot__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo16_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo16_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/LNG-Shot.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LNG-SHOT_Kyber.png" } },
+            { name: "ARM-CORE", type: "Battle", rarity: "Epic", recipe: "ARG + ARG + B2 HEAVY", image: "https://droidarchives.co.uk/assets/droids/ARM-CORE_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/ARM-CORE_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion16_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion16_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion16_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion16_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion16_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion16_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ARM-CORE_Kyber.png" } },
+            { name: "OPT-AR", type: "Battle", rarity: "Epic", recipe: "R2 + R2 + B2 SUPER", image: "https://droidarchives.co.uk/assets/droids/OPT-AR_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/OPT-AR_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion15_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion15_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion15_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion15_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion15_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion15_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/OPT-AR_Kyber.png" } },
+            { name: "LOM", type: "Protocol", rarity: "Epic", image: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_LOM_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_LOM_Common.png", gold: "https://droidarchives.co.uk/assets/droids/protocol/LOM_Gold_v2.png", diamond: "https://droidarchives.co.uk/assets/droids/protocol/LOM_Diamond_v2.png", rainbow: "https://droidarchives.co.uk/assets/droids/protocol/LOM_Rainbow_v2.png", beskar: "https://droidarchives.co.uk/assets/droids/protocol/LOM_Beskar_v2.png", galactic: "https://droidarchives.co.uk/assets/droids/protocol/LOM_Galactic_v2.png", stellar: "https://droidarchives.co.uk/assets/droids/protocol/LOM_Stellar_v2.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LOM_Kyber.png" } },
+            { name: "PROTO-ROLLER", type: "Worker", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/Proto-Roller_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Proto-Roller_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Proto-Roller__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Proto-Roller__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Proto-Roller__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_ProtoRoller_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_ProtoRoller_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Proto-Roller.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/PROTO-ROLLER_Kyber.png" } },
+            { name: "MECHA-DROID", type: "Worker", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/Mecha-Droid_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Mecha-Droid_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Mecha-Droid__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Mecha-Droid__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Mecha-Droid__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo06_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo06_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Mecha-Droid.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/MECHA-DROID_Kyber.png" } },
+            { name: "MONO-WLKR", type: "Worker", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/mono-walker/T_Portrait_Combo18_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mono-walker/T_Portrait_Combo18_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mono-walker/T_Portrait_Combo18_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mono-walker/T_Portrait_Combo18_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mono-walker/T_Portrait_Combo18_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo18_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo18_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Mono-WLKR.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/MONO-WALKER_Kyber.png" } },
+            { name: "RO-TOR", type: "Worker", rarity: "Legendary", recipe: "BB9 + PIT + B1 BATTLE", image: "https://droidarchives.co.uk/assets/droids/RO-TOR_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/RO-TOR_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion08_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion08_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion08_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion08_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion08_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion08_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/RO-TOR_Kyber.png" } },
+            { name: "FUS-3", type: "Worker", rarity: "Legendary", recipe: "R7 + B-U4D + B-U4D", image: "https://droidarchives.co.uk/assets/droids/FUS-3_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/FUS-3_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion05_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion05_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion05_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion05_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion05_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion05_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/FUS-3_Kyber.png" } },
+            { name: "BB9", type: "Astromech", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/BB9_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/BB9_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/BB9__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/BB9__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/BB9__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_BB9_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_BB9_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/BB9.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/BB9_Kyber.png" } },
+            { name: "R7", type: "Astromech", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/R7_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R7_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/R7__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/R7__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/R7__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_R7_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_R7_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/R7.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/R7_Kyber.png" } },
+            { name: "QIK-BIT", type: "Astromech", rarity: "Legendary", recipe: "GROUNDMECH + GROUNDMECH + BB9", image: "https://droidarchives.co.uk/assets/droids/QIK-BIT_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/QIK-BIT_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion10_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion10_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion10_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion10_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion10_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion10_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/QIK-BIT_Kyber.png" } },
+            { name: "B2-RP", type: "Battle", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/B2-RP_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/B2-RP_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/B2-RP__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/B2-RP__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/B2-RP__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_B2Rocket_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_B2Rocket_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/B2-RP.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/B2-RP_Kyber.png" } },
+            { name: "CYCLO-GRAV", type: "Battle", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/Cyclo-Grav_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Cyclo-Grav_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Cyclo-Grav__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Cyclo-Grav__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Cyclo-Grav__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo08_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo08_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Cyclo-Grav.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/CYCLO-GRAV_Kyber.png" } },
+            { name: "OPTI-STRK", type: "Battle", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/Opti-STRK_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Opti-STRK_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/Opti-STRK__Gold__-_Droid_-_Droid_Tycoon.png", diamond: "https://droidarchives.co.uk/assets/droids/Opti-STRK__Diamond__-_Droid_-_Droid_Tycoon.png", rainbow: "https://droidarchives.co.uk/assets/droids/Opti-STRK__Rainbow__-_Droid_-_Droid_Tycoon.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo14_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo14_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Opti-STRK.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/OPTI-STRIKE_Kyber.png" } },
+            { name: "ORB-XL", type: "Battle", rarity: "Legendary", recipe: "CB + GUNRUNNER + B2-RP", image: "https://droidarchives.co.uk/assets/droids/ORB-XL_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/ORB-XL_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion09_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion09_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion09_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion09_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion09_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion09_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/ORB-XL_Kyber.png" } },
+            { name: "PZ", type: "Protocol", rarity: "Legendary", image: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_PZ_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_PZ_Common.png", gold: "https://droidarchives.co.uk/assets/droids/protocol/PZ_Gold_v2.png", diamond: "https://droidarchives.co.uk/assets/droids/protocol/PZ_Diamond_v2.png", rainbow: "https://droidarchives.co.uk/assets/droids/protocol/PZ_Rainbow_v2.png", beskar: "https://droidarchives.co.uk/assets/droids/protocol/PZ_Beskar_v2.png", galactic: "https://droidarchives.co.uk/assets/droids/protocol/PZ_Galactic_v2.png", stellar: "https://droidarchives.co.uk/assets/droids/protocol/PZ_Stellar_v2.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/PZ_Kyber.png" } },
+            { name: "SNOW MOUSE", type: "Worker", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_SnowMouse_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_SnowMouse_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_SnowMouse_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_SnowMouse_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_SnowMouse_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_SnowMouse_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_SnowMouse_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Snow_Mouse.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/SNOW_MOUSE_Kyber.png" } },
+            { name: "RIC", type: "Worker", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Ric_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Ric_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/RIC.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/RIC_Kyber.png" } },
+            { name: "LOADLIFTER", type: "Worker", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LoadLifter_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LoadLifter_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LoadLifter_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LoadLifter_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LoadLifter_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_LoadLifter_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_LoadLifter_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Loadlifter.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LOADLIFTER_Kyber.png" } },
+            { name: "LEP", type: "Worker", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LEP_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LEP_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LEP_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LEP_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_LEP_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_LEP_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_LEP_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Lep.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LEP_Kyber.png" } },
+            { name: "RIC-1200", type: "Worker", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric1200_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric1200_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric1200_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric1200_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Ric1200_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Ric1200_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Ric1200_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/RIC-1200.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/RIC-1200_Kyber.png" } },
+            { name: "RIV-3T", type: "Worker", rarity: "Mythic", recipe: "KX + IG + Ric", image: "https://droidarchives.co.uk/assets/droids/RIV-3T_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/RIV-3T_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion02_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion02_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion02_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion02_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion02_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion02_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/RIV-3T_Kyber.png" } },
+            { name: "LUG-G", type: "Worker", rarity: "Mythic", recipe: "LOADLIFTER + ID10 + R5", image: "https://droidarchives.co.uk/assets/droids/LUG-G_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/LUG-G_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion03_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion03_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion03_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion03_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion03_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion03_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LUG-G_Kyber.png" } },
+            { name: "LOW-MO", type: "Worker", rarity: "Mythic", recipe: "A-LT + A-LT + LOADLIFTER", image: "https://droidarchives.co.uk/assets/droids/LOW-MO_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/LOW-MO_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion06_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion06_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion06_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion06_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion06_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion06_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/LOW-MO_Kyber.png" } },
+            { name: "DRFT-R", type: "Astromech", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo20_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo20_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo20_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo20_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo20_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo20_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo20_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/DRFT-R.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/DRFT-R_Kyber.png" } },
+            { name: "CYCLENS", type: "Astromech", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo21_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo21_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo21_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo21_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo21_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo21_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo21_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Cyclens.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/CYCLENS_Kyber.png" } },
+            { name: "MO-TRAK", type: "Astromech", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo22_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo22_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo22_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo22_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo22_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo22_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo22_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Mo-Trak.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/MO-TRAK_Kyber.png" } },
+            { name: "TRI-TEK", type: "Astromech", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo23_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo23_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo23_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo23_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_Combo23_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_Combo23_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_Combo23_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/Tri-Tek.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/TRI-TEK_Kyber.png" } },
+            { name: "AXI-POD", type: "Astromech", rarity: "Mythic", recipe: "Ric + BDX EXPLORER + R7", image: "https://droidarchives.co.uk/assets/droids/AXI-POD_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/AXI-POD_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion04_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion04_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion04_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion04_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion04_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion04_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/AXI-POD_Kyber.png" } },
+            { name: "IG", type: "Battle", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_IG_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_IG_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_IG_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_IG_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_IG_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_IG_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_IG_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/IG.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/IG_Kyber.png" } },
+            { name: "KX", type: "Battle", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_KX_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_KX_Common.png", gold: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_KX_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_KX_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/mythic/T_Portrait_KX_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/beskar/T_Portrait_KX_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/galactic/T_Portrait_KX_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/stellar/KX.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/KX_Kyber.png" } },
+            { name: "SRV-O", type: "Battle", rarity: "Mythic", recipe: "RIC-1200 + B1 HEAVY + B1 HEAVY", image: "https://droidarchives.co.uk/assets/droids/SRV-O_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/SRV-O_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion01_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion01_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion01_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion01_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion01_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion01_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/SRV-O_Kyber.png" } },
+            { name: "X-ONK", type: "Battle", rarity: "Mythic", recipe: "KX + KX + GONK", image: "https://droidarchives.co.uk/assets/droids/X-ONK_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/X-ONK_-_Droid_-_Droid_Tycoon.png", gold: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion07_Gold.png", diamond: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion07_Diamond.png", rainbow: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion07_Rainbow.png", beskar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion07_Beskar.png", galactic: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion07_Galactic.png", stellar: "https://droidarchives.co.uk/assets/droids/fusion/T_Portrait_Fusion07_Stellar.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/X-ONK_Kyber.png" } },
+            { name: "TDA", type: "Protocol", rarity: "Mythic", image: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_TDA_Common.png", images: { default: "https://droidarchives.co.uk/assets/droids/protocol/T_Portrait_TDA_Common.png", gold: "https://droidarchives.co.uk/assets/droids/protocol/TDA_Gold_v2.png", diamond: "https://droidarchives.co.uk/assets/droids/protocol/TDA_Diamond_v2.png", rainbow: "https://droidarchives.co.uk/assets/droids/protocol/TDA_Rainbow_v2.png", beskar: "https://droidarchives.co.uk/assets/droids/protocol/TDA_Beskar_v2.png", galactic: "https://droidarchives.co.uk/assets/droids/protocol/TDA_Galactic_v2.png", stellar: "https://droidarchives.co.uk/assets/droids/protocol/TDA_Stellar_v2.png", kyber: "https://droidarchives.co.uk/assets/droids/kyber/TDA_Kyber.png" } },
+            { name: "DJ R-3X", type: "Worker", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/DJ-R3X_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/DJ-R3X_-_Droid_-_Droid_Tycoon.png" } },
+            { name: "C-3PO", type: "Worker", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/C-3PO_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/C-3PO_-_Droid_Tycoon.png" } },
+            { name: "D-O", type: "Worker", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/D-O.png", images: { default: "https://droidarchives.co.uk/assets/droids/D-O.png" } },
+            { name: "BB-8", type: "Astromech", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/BB-8_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/BB-8_-_Droid_-_Droid_Tycoon.png" } },
+            { name: "CB-23", type: "Astromech", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/CB-23_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/CB-23_-_Droid_-_Droid_Tycoon.png" } },
+            { name: "R2-D2", type: "Astromech", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/R2-D2_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/R2-D2_-_Droid_-_Droid_Tycoon.png" } },
+            { name: "CHOPPER", type: "Astromech", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/Chopper.png", images: { default: "https://droidarchives.co.uk/assets/droids/Chopper.png" } },
+            { name: "MISTER BONES", type: "Battle", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/Mister_Bones_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/Mister_Bones_-_Droid_-_Droid_Tycoon.png" } },
+            { name: "IG-11 MARSHAL", type: "Battle", rarity: "Iconic", image: "https://droidarchives.co.uk/assets/droids/IG-11_Marshal_-_Droid_-_Droid_Tycoon.png", images: { default: "https://droidarchives.co.uk/assets/droids/IG-11_Marshal_-_Droid_-_Droid_Tycoon.png" } }
+        ];
+
+        const typeImages = {
+            "Worker": "https://droidarchives.co.uk/assets/types/Worker_Droid_-_Droid_-_Droid_Tycoon.png",
+            "Astromech": "https://droidarchives.co.uk/assets/types/Astromech_Droid_-_Droid_-_Droid_Tycoon.png",
+            "Battle": "https://droidarchives.co.uk/assets/types/Battle_Droid_-_Droid_-_Droid_Tycoon.png",
+            "Protocol": "https://droidarchives.co.uk/assets/types/Protocol.svg"
+        };
+
+        const finishes = ["Default", "Gold", "Diamond", "Rainbow", "Beskar", "Galactic", "Stellar", "Kyber"];
+        const kyberVariants = [
+            { label: "Kyber", key: "kyber", filterClass: "kyber-filter-kyber" },
+            { label: "Kyber Green", key: "kyber-green", filterClass: "kyber-filter-kyber-green" },
+            { label: "Kyber Blue", key: "kyber-blue", filterClass: "kyber-filter-kyber-blue" },
+            { label: "Kyber Purple", key: "kyber-purple", filterClass: "kyber-filter-kyber-purple" }
+        ];
+
+        const tableBody = document.getElementById('checklist-table-body');
+        const completedBody = document.getElementById('completed-table-body');
+        
+        let currentSort = localStorage.getItem('droidSortPreference') || 'default';
+        let activeFilterColumn = null; 
+        let selectedIngredients = new Set();
+
+        // Extract unique recipe ingredients dynamically
+        function extractUniqueIngredients() {
+            const ingredientMap = new Map();
+            droids.forEach(d => {
+                if (d.recipe && d.recipe !== "??") {
+                    const parts = d.recipe.split('+').map(p => p.trim());
+                    parts.forEach(part => {
+                        const lowerName = part.toLowerCase();
+                        if (!ingredientMap.has(lowerName)) {
+                            const match = droids.find(droid => droid.name.toLowerCase() === lowerName);
+                            ingredientMap.set(lowerName, {
+                                name: match ? match.name : part,
+                                image: match ? ((match.images && match.images.default) ? match.images.default : match.image) : ''
+                            });
+                        }
+                    });
+                }
+            });
+            return Array.from(ingredientMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        function buildIngredientFilterBar() {
+            const container = document.getElementById('ingredient-chips');
+            container.innerHTML = '';
+            const ingredients = extractUniqueIngredients();
+
+            ingredients.forEach(item => {
+                const chip = document.createElement('div');
+                chip.className = 'ingredient-chip';
+                chip.setAttribute('data-ingredient', item.name.toLowerCase());
+                chip.innerHTML = `
+                    <img class="ingredient-chip-img" src="${item.image}" alt="${item.name}" onerror="this.style.display='none'">
+                    <span>${item.name}</span>
+                `;
+                chip.onclick = () => toggleIngredientFilter(item.name.toLowerCase(), chip);
+                container.appendChild(chip);
+            });
+        }
+
+        function toggleIngredientFilter(ingredientLower, chipEl) {
+            if (selectedIngredients.has(ingredientLower)) {
+                selectedIngredients.delete(ingredientLower);
+                chipEl.classList.remove('active');
+            } else {
+                selectedIngredients.add(ingredientLower);
+                chipEl.classList.add('active');
+            }
+            applyFilter();
+        }
+
+        function clearIngredientFilters() {
+            selectedIngredients.clear();
+            document.querySelectorAll('.ingredient-chip').forEach(c => c.classList.remove('active'));
+            applyFilter();
+        }
+
+        droids.forEach((droid, index) => {
+            const row = document.createElement('tr');
+            row.className = 'main-droid-row';
+            
+            if (droid.recipe) {
+                row.classList.add('has-fusion');
+            }
+            
+            row.setAttribute('data-index', index); 
+            row.setAttribute('data-name', droid.name.toLowerCase()); 
+            
+            const nameCell = document.createElement('td');
+            nameCell.className = 'droid-name-cell';
+            const safeDroidId = droid.name.replace(/[^a-zA-Z0-9]/g, '');
+            const safeType = droid.type || "Worker";
+            const typeImgSrc = typeImages[safeType];
+            
+            let sparkleHTML = '';
+            if (droid.rarity !== "Iconic") {
+                sparkleHTML = `<span class="sparkle-icon" data-droid="${safeDroidId}" onclick="toggleSparkle(this)">✨</span>`;
+            }
+
+            nameCell.innerHTML = `
+                <div class="droid-name-wrapper">
+                    <div class="droid-meta-container">
+                        <img class="type-icon" src="${typeImgSrc}" alt="${safeType}">
+                        <div class="badges-col">
+                            <span class="rarity-badge rarity-${droid.rarity}">${droid.rarity}</span>
+                        </div>
+                    </div>
+                    <img class="droid-photo" src="${droid.image}" alt="${droid.name} Photo" onclick="openModal('${droid.image}')" onerror="this.src='https://static.wikia.nocookie.net/starwars/images/8/8c/JawaCharacters-DroidTycoon.png'">
+                    ${sparkleHTML}
+                    <span class="droid-name-text">${droid.name}</span>
+                </div>
+            `;
+            row.appendChild(nameCell);
+            
+            finishes.forEach((finish) => {
+                const cell = document.createElement('td');
+                const finishClass = finish.toLowerCase();
+                
+                if (droid.rarity === "Iconic" && finish !== "Default") {
+                    cell.className = `checkbox-cell col-${finishClass} checked-cell`;
+                } else if (finish === "Kyber") {
+                    cell.className = `checkbox-cell col-kyber`;
+                    
+                    const imgPath = (droid.images && droid.images.kyber) ? droid.images.kyber : droid.image;
+                    let hoverRecipeHTML = getHoverRecipeHTML(droid, 'kyber');
+
+                    let subItemsHTML = '';
+                    kyberVariants.forEach(kVar => {
+                        const uniqueId = `${safeDroidId}-${kVar.key}`;
+                        subItemsHTML += `
+                            <div class="kyber-sub-item">
+                                <input type="checkbox" id="${uniqueId}" onchange="saveProgress(this)">
+                                <label for="${uniqueId}">${kVar.label}</label>
+                                <div class="variant-hover-container col-kyber">
+                                    <img class="variant-hover-photo ${kVar.filterClass}" src="${imgPath}" alt="${droid.name} ${kVar.label}" onerror="this.src='https://static.wikia.nocookie.net/starwars/images/8/8c/JawaCharacters-DroidTycoon.png'">
+                                    ${hoverRecipeHTML}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    cell.innerHTML = `
+                        <div class="kyber-group-container">
+                            ${subItemsHTML}
+                        </div>
+                    `;
+                } else {
+                    cell.className = `checkbox-cell col-${finishClass}`;
+                    
+                    const imgPath = (droid.images && droid.images[finishClass]) ? droid.images[finishClass] : droid.image;
+                    const uniqueId = `${safeDroidId}-${finish}`;
+                    let hoverRecipeHTML = getHoverRecipeHTML(droid, finishClass);
+
+                    cell.innerHTML = `
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="${uniqueId}" onchange="saveProgress(this)">
+                            <label for="${uniqueId}">${finish}</label>
+                            <div class="variant-hover-container col-${finishClass}">
+                                <img class="variant-hover-photo" src="${imgPath}" alt="${droid.name} ${finish}" onerror="this.src='https://static.wikia.nocookie.net/starwars/images/8/8c/JawaCharacters-DroidTycoon.png'">
+                                ${hoverRecipeHTML}
+                            </div>
+                        </div>
+                    `;
+                }
+                row.appendChild(cell);
+            });
+            
+            tableBody.appendChild(row);
+
+            if (droid.recipe) {
+                let formattedRecipe = droid.recipe;
+                
+                if (droid.recipe !== "??") {
+                    formattedRecipe = droid.recipe.split('+').map(part => {
+                        const cleanName = part.trim();
+                        const matchingDroid = droids.find(d => d.name.toLowerCase() === cleanName.toLowerCase());
+                        
+                        if (matchingDroid) {
+                            const defaultImg = (matchingDroid.images && matchingDroid.images.default) ? matchingDroid.images.default : matchingDroid.image;
+                            return `${cleanName} <img class="recipe-mini-img" src="${defaultImg}" alt="${cleanName}">`;
+                        }
+                        return cleanName;
+                    }).join(' + ');
+                }
+
+                const fusionRow = document.createElement('tr');
+                fusionRow.id = `fusion-row-${index}`;
+                fusionRow.className = 'fusion-row';
+                fusionRow.innerHTML = `
+                    <td colspan="9">
+                        <span class="fusion-recipe-text">🛠️ <strong style="margin-right: 15px;">Recipe: ${formattedRecipe}</strong></span>
+                    </td>
+                `;
+                tableBody.appendChild(fusionRow);
+            }
+
+            const spacerRow = document.createElement('tr');
+            spacerRow.id = `spacer-row-${index}`;
+            spacerRow.className = 'card-spacer';
+            spacerRow.innerHTML = `<td colspan="9"></td>`;
+            tableBody.appendChild(spacerRow);
+        });
+
+        function getHoverRecipeHTML(droid, finishClass) {
+            if (droid.recipe && droid.recipe !== "??") {
+                const recipeParts = droid.recipe.split('+').map(p => p.trim());
+                let imagesHTML = [];
+                recipeParts.forEach(part => {
+                    const match = droids.find(d => d.name.toLowerCase() === part.toLowerCase());
+                    if (match) {
+                        const partImg = (match.images && match.images[finishClass]) ? match.images[finishClass] : match.image;
+                        imagesHTML.push(`<img class="hover-recipe-img" src="${partImg}" alt="${part}">`);
+                    }
+                });
+                if (imagesHTML.length > 0) {
+                    return `<div class="hover-recipe-container">${imagesHTML.join('<span class="hover-recipe-plus">+</span>')}</div>`;
+                }
+            }
+            return '';
+        }
+
+        function updateStats() {
+            const allRows = document.querySelectorAll('#checklist-table-body tr.main-droid-row, #completed-table-body tr.main-droid-row');
+            
+            let totals = { flawless: 0, default: 0, gold: 0, diamond: 0, rainbow: 0, beskar: 0, galactic: 0, stellar: 0, kyber: 0 };
+            let counts = { flawless: 0, default: 0, gold: 0, diamond: 0, rainbow: 0, beskar: 0, galactic: 0, stellar: 0, kyber: 0 };
+
+            allRows.forEach(row => {
+                const index = row.getAttribute('data-index');
+                if (index === null) return; 
+                
+                const droid = droids[index];
+                const isIconic = droid.rarity === "Iconic";
+
+                if (!isIconic) {
+                    totals.flawless++;
+                    const sparkle = row.querySelector('.sparkle-icon');
+                    if (sparkle && sparkle.classList.contains('active')) counts.flawless++;
+                }
+
+                finishes.forEach(finish => {
+                    const finishClass = finish.toLowerCase();
+                    if (isIconic && finish !== "Default") return;
+                    
+                    if (finish === "Kyber") {
+                        const kyberCheckboxes = row.querySelectorAll('.col-kyber input[type="checkbox"]');
+                        kyberCheckboxes.forEach(cb => {
+                            totals.kyber++;
+                            if (cb.checked) counts.kyber++;
+                        });
+                    } else {
+                        totals[finishClass]++;
+                        const checkbox = row.querySelector(`.col-${finishClass} input[type="checkbox"]`);
+                        if (checkbox && checkbox.checked) counts[finishClass]++;
+                    }
+                });
+            });
+
+            const updateText = (id, count, total) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const percent = total === 0 ? 0 : Math.round((count / total) * 100);
+                    el.innerText = `${count}/${total} (${percent}%)`;
+                }
+            };
+
+            updateText('stat-flawless', counts.flawless, totals.flawless);
+            finishes.forEach(f => {
+                const finishClass = f.toLowerCase();
+                updateText(`stat-${finishClass}`, counts[finishClass], totals[finishClass]);
+            });
+        }
+
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = imageSrc;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+        }
+
+        function toggleFilter(columnName) {
+            if (activeFilterColumn === columnName) {
+                activeFilterColumn = null;
+                document.querySelectorAll('.filter-header').forEach(th => th.classList.remove('filter-active'));
+            } else {
+                activeFilterColumn = columnName;
+                document.querySelectorAll('.filter-header').forEach(th => th.classList.remove('filter-active'));
+                document.querySelector('.th-' + columnName).classList.add('filter-active');
+            }
+            applyFilter();
+        }
+
+        function applyFilter() {
+            const allRows = document.querySelectorAll('#checklist-table-body tr.main-droid-row, #completed-table-body tr.main-droid-row');
+            allRows.forEach(row => {
+                let shouldHide = false;
+                const index = parseInt(row.getAttribute('data-index'));
+                const droid = droids[index];
+                
+                // 1. Column finish filter check
+                if (activeFilterColumn) {
+                    const cell = row.querySelector('.col-' + activeFilterColumn);
+                    if (cell) {
+                        const checkboxes = cell.querySelectorAll('input[type="checkbox"]');
+                        if (checkboxes.length > 0) {
+                            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                            if (allChecked) {
+                                shouldHide = true;
+                            }
+                        }
+                    }
+                }
+
+                // 2. Ingredient filter check (OR Logic: match any active ingredient)
+                if (!shouldHide && selectedIngredients.size > 0) {
+                    if (!droid.recipe || droid.recipe === "??") {
+                        shouldHide = true;
+                    } else {
+                        const recipeParts = droid.recipe.split('+').map(p => p.trim().toLowerCase());
+                        const matchesIngredient = recipeParts.some(part => selectedIngredients.has(part));
+                        if (!matchesIngredient) {
+                            shouldHide = true;
+                        }
+                    }
+                }
+
+                row.style.display = shouldHide ? 'none' : '';
+
+                const fusionRow = document.getElementById('fusion-row-' + index);
+                if (fusionRow) {
+                    fusionRow.style.display = shouldHide ? 'none' : 'table-row';
+                }
+                
+                const spacerRow = document.getElementById('spacer-row-' + index);
+                if (spacerRow) {
+                    spacerRow.style.display = shouldHide ? 'none' : 'table-row';
+                }
+            });
+            toggleHeaders(); 
+        }
+
+        function updateSortBtnUI() {
+            const btn = document.getElementById('sort-toggle-btn');
+            if (currentSort === 'alphabetical') {
+                btn.innerHTML = '🔢 Sort: Default Order';
+                btn.classList.add('sort-active');
+            } else {
+                btn.innerHTML = '🔤 Sort: Alphabetical';
+                btn.classList.remove('sort-active');
+            }
+        }
+
+        function toggleSort() {
+            currentSort = currentSort === 'default' ? 'alphabetical' : 'default';
+            localStorage.setItem('droidSortPreference', currentSort);
+            updateSortBtnUI();
+            sortSection(tableBody);
+            sortSection(completedBody);
+        }
+
+        function toggleSparkle(element) {
+            element.classList.toggle('active');
+            const droidId = element.getAttribute('data-droid');
+            localStorage.setItem(`sparkle-${droidId}`, element.classList.contains('active'));
+            const row = element.closest('tr');
+            placeRow(row);
+            updateStats();
+        }
+
+        function saveProgress(checkbox) {
+            localStorage.setItem(checkbox.id, checkbox.checked);
+            updateCellHighlight(checkbox);
+            const row = checkbox.closest('tr');
+            checkRowCompletionStyle(row);
+            placeRow(row);
+            updateStats();
+        }
+
+        function updateCellHighlight(checkbox) {
+            const cell = checkbox.closest('.checkbox-cell');
+            const checkboxes = cell.querySelectorAll('input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked && checkboxes.length > 0) {
+                cell.classList.add('checked-cell');
+            } else {
+                cell.classList.remove('checked-cell');
+            }
+        }
+
+        function checkRowCompletionStyle(row) {
+            const nameCell = row.querySelector('.droid-name-cell');
+            const checkboxes = row.querySelectorAll('input[type="checkbox"]');
+            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked) {
+                nameCell.classList.add('row-complete');
+            } else {
+                nameCell.classList.remove('row-complete');
+            }
+        }
+
+        function placeRow(row) {
+            const sparkleIcon = row.querySelector('.sparkle-icon');
+            const isFlawless = sparkleIcon ? sparkleIcon.classList.contains('active') : false;
+            const checkboxes = row.querySelectorAll('input[type="checkbox"]');
+            const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
+
+            if (isFlawless) {
+                row.classList.add('row-flawless');
+            } else {
+                row.classList.remove('row-flawless');
+            }
+
+            let targetBody = allChecked ? completedBody : tableBody;
+            const index = row.getAttribute('data-index');
+            const fusionRow = document.getElementById('fusion-row-' + index);
+            const spacerRow = document.getElementById('spacer-row-' + index);
+
+            if (row.parentElement !== targetBody) {
+                targetBody.appendChild(row);
+                if (fusionRow) targetBody.appendChild(fusionRow);
+                if (spacerRow) targetBody.appendChild(spacerRow);
+            }
+
+            if (fusionRow) {
+                fusionRow.style.display = 'table-row';
+            }
+
+            sortSection(targetBody);
+            applyFilter(); 
+        }
+
+        function sortSection(tbody) {
+            const rows = Array.from(tbody.querySelectorAll('tr.main-droid-row'));
+            rows.sort((a, b) => {
+                if (currentSort === 'alphabetical') {
+                    return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                } else {
+                    return parseInt(a.getAttribute('data-index')) - parseInt(b.getAttribute('data-index'));
+                }
+            });
+            rows.forEach(row => {
+                tbody.appendChild(row);
+                const index = row.getAttribute('data-index');
+                
+                const fusionRow = document.getElementById('fusion-row-' + index);
+                if (fusionRow) tbody.appendChild(fusionRow);
+                
+                const spacerRow = document.getElementById('spacer-row-' + index);
+                if (spacerRow) tbody.appendChild(spacerRow);
+            });
+        }
+
+        function toggleHeaders() {
+            const completedHeader = document.getElementById('completed-header');
+            const visibleCompletedRows = Array.from(completedBody.querySelectorAll('tr.main-droid-row')).some(row => row.style.display !== 'none');
+            completedHeader.style.display = visibleCompletedRows ? '' : 'none';
+        }
+
+        function loadProgress() {
+            buildIngredientFilterBar();
+            updateSortBtnUI();
+
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach((checkbox) => {
+                const savedState = localStorage.getItem(checkbox.id);
+                if (savedState === 'true') {
+                    checkbox.checked = true;
+                }
+                updateCellHighlight(checkbox);
+            });
+
+            const sparkles = document.querySelectorAll('.sparkle-icon');
+            sparkles.forEach((icon) => {
+                const droidId = icon.getAttribute('data-droid');
+                if (localStorage.getItem(`sparkle-${droidId}`) === 'true') {
+                    icon.classList.add('active');
+                }
+            });
+
+            const droidRows = document.querySelectorAll('tr.main-droid-row');
+            droidRows.forEach(row => {
+                checkRowCompletionStyle(row);
+                placeRow(row);
+            });
+            
+            sortSection(tableBody);
+            sortSection(completedBody);
+            applyFilter(); 
+            updateStats();
+        }
+
+        function openResetModal() {
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
+
+        function closeResetModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        function confirmClearProgress() {
+            const savedSort = localStorage.getItem('droidSortPreference');
+            
+            localStorage.clear();
+            if (savedSort) localStorage.setItem('droidSortPreference', savedSort);
+            
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.checked = false;
+                updateCellHighlight(cb);
+            });
+
+            const sparkles = document.querySelectorAll('.sparkle-icon');
+            sparkles.forEach(icon => {
+                icon.classList.remove('active');
+            });
+            
+            clearIngredientFilters();
+
+            const droidRows = document.querySelectorAll('tr.main-droid-row');
+            droidRows.forEach(row => {
+                checkRowCompletionStyle(row);
+                placeRow(row);
+            });
+            
+            applyFilter();
+            updateStats();
+            closeResetModal();
+        }
+
+        window.onload = loadProgress;
+    </script>
+</body>
+</html>
