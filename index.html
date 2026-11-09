@@ -7,16 +7,28 @@
     <style>
     @import url('https://fonts.cdnfonts.com/css/hogira');
     @import url('https://fonts.cdnfonts.com/css/baz-2');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: auto;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Hogira", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f4f4f9;
             color: #333;
-            max-width: 1600px;
-            margin: 40px auto;
+            width: max-content;
+            min-width: min-content;
+            margin: 0 auto;
             padding: 20px;
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+            text-align: center;
         }
         .header-banner {
             display: block;
@@ -57,15 +69,29 @@
         .sort-btn.sort-active { background-color: #17a2b8; }
         .sort-btn.sort-active:hover { background-color: #138496; }
 
-        /* --- Recipe Ingredient Filter Panel Styles --- */
-        .ingredient-filter-panel {
-            background: #1e232a;
-            border: 1px solid #343a40;
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
+        /* --- Table & Filter Wrapper --- */
+		.table-responsive {
+			display: inline-block;
+		    width: fit-content;
+		    max-width: 100%;
+		    margin: 0 auto 20px auto;
+		    overflow: visible;
+		    text-align: left;
+		}
+
+		/* --- Recipe Ingredient Filter Panel Styles --- */
+		.ingredient-filter-panel {
+		    display: block;
+		    width: 0;
+		    min-width: 100%;
+		    box-sizing: border-box;
+		    background: #1e232a;
+		    border: 1px solid #343a40;
+		    border-radius: 8px;
+		    padding: 14px 18px;
+		    margin: 0 0 25px 0;
+		    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+		}
         .ingredient-filter-header {
             display: flex;
             justify-content: space-between;
@@ -100,10 +126,12 @@
             color: #fff;
         }
         .ingredient-chips-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			width: 100%;
+			box-sizing: border-box;
+		}
         .ingredient-chip {
             display: inline-flex;
             align-items: center;
@@ -143,19 +171,25 @@
             padding: 1px;
         }
 
+        /* --- Table Styling --- */
         table {
-            width: 100%;
+            width: max-content;
             border-collapse: separate;
             border-spacing: 0;
-            margin-bottom: 20px;
-            table-layout: fixed; 
+            margin-bottom: 0;
+            table-layout: auto; 
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 8px 4px;
+            padding: 8px 12px;
             text-align: center;
+            box-sizing: border-box;
+            white-space: nowrap;
         }
-        
+
+        .col-name-head, td.droid-name-cell { min-width: 280px; }
+        .col-finish-head, .checkbox-cell { min-width: 105px; }
+
         thead th {
             border: 1px solid #ddd;
         }
@@ -170,7 +204,7 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
             white-space: nowrap; 
         }
-        
+
         .stats-row th {
             background-color: transparent; 
             border: 1px solid transparent; 
@@ -195,10 +229,10 @@
         .header-title {
             position: relative;
             z-index: 2;
-            display: block;
+            display: inline-block;
+            white-space: nowrap;
         }
 
-        /* --- Static Column Styles --- */
         th.th-default, .col-default { 
             background: 
                 linear-gradient(105deg, rgba(255,255,255,0) 20%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 80%),
@@ -291,7 +325,7 @@
         }
 
         .completed-header-bg th { background: #28a745 !important; }
-        
+
         .filter-header { cursor: pointer; user-select: none; transition: opacity 0.2s ease; }
         .filter-header:hover { opacity: 0.85; }
         .filter-active { box-shadow: inset 0 -4px 0 rgba(255, 255, 255, 0.8); text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
@@ -352,6 +386,7 @@
             align-items: center; 
             justify-content: center;
             text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            white-space: nowrap;
         }
 
         .recipe-mini-img {
@@ -369,18 +404,19 @@
             text-align: left; font-weight: bold; background-color: transparent; 
             color: #111; transition: background-color 0.2s ease, color 0.2s ease; 
             position: relative; overflow: visible; 
+            white-space: nowrap;
         }
         td.droid-name-cell:hover { z-index: 999; }
         .droid-name-wrapper { display: flex; align-items: center; white-space: nowrap; position: relative; z-index: 1; overflow: visible; }
-        .droid-name-text { font-family: 'baz', sans-serif; letter-spacing: 1px; font-size: 1.4em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        
+        .droid-name-text { font-family: 'baz', sans-serif; letter-spacing: 1px; font-size: 1.4em; white-space: nowrap; }
+
         .droid-meta-container {
             display: flex;
             align-items: center;
             margin-right: 12px;
             flex-shrink: 0;
         }
-        
+
         .type-icon {
             width: 28px;
             height: 28px;
@@ -395,7 +431,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .badges-col {
             display: flex;
             flex-direction: column;
@@ -570,10 +606,10 @@
         }
 
         td.droid-name-cell.row-complete { background-color: #c3e6cb !important; color: #1e5631; }
-        .checkbox-cell { transition: background 0.2s ease; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); position: relative; }
+        .checkbox-cell { transition: background 0.2s ease; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.7); position: relative; white-space: nowrap; }
         .checkbox-cell:hover { z-index: 999; }
         .checkbox-cell.checked-cell { background: #d4edda !important; color: #155724 !important; text-shadow: none; }
-        
+
         /* Transparent Darkening for Scourge Column (Keeps Tendrils Visible) */
         .checkbox-cell.col-scourge.checked-cell { 
             background: 
@@ -587,45 +623,45 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.9); 
             box-shadow: inset 0 0 14px rgba(40, 167, 69, 0.5), inset 0 0 6px rgba(0, 0, 0, 0.8) !important;
         }
-        
-        .checkbox-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative; z-index: 2;}
-        
-        /* Multi-checkbox layout for Kyber & Scourge Columns */
+
+        .checkbox-container { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; position: relative; z-index: 2; white-space: nowrap;}
+
+        /* --- Kyber & Scourge Group Controls --- */
         .kyber-group-container, .scourge-group-container {
             display: flex;
             flex-direction: column;
             gap: 2px;
             align-items: flex-start;
-            padding: 2px 4px;
+            justify-content: center;
+            width: fit-content;
+            margin: 0 auto;
+            padding: 2px 0;
             font-size: 0.9em;
+            white-space: nowrap;
         }
         .kyber-sub-item, .scourge-sub-item {
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             width: 100%;
             position: relative;
             z-index: 2;
-        }
-        
-        /* Specific Sizing for Kyber Main Item & Indented Sub-Items */
-        .kyber-sub-item.kyber-main label {
-            font-size: 0.9em;
-            font-weight: normal;
-            cursor: pointer;
-            user-select: none;
             white-space: nowrap;
         }
-        .kyber-sub-item.kyber-sub {
-            margin-left: 10px;
+
+        .kyber-sub-item.kyber-main,
+        .scourge-sub-item.scourge-main {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            margin-bottom: 3px;
+            padding-bottom: 2px;
         }
-        .kyber-sub-item.kyber-sub label {
-            font-size: 0.75em;
-            cursor: pointer;
-            user-select: none;
-            white-space: nowrap;
+
+        .kyber-sub-item.kyber-sub,
+        .scourge-sub-item.scourgedex-sub {
+            padding-left: 12px;
         }
-        
-        /* Specific Sizing for Scourge Main Item & Indented Scourgedex Sub-Item */
+
+        .kyber-sub-item.kyber-main label,
         .scourge-sub-item.scourge-main label {
             font-size: 0.9em;
             font-weight: normal;
@@ -633,9 +669,7 @@
             user-select: none;
             white-space: nowrap;
         }
-        .scourge-sub-item.scourgedex-sub {
-            margin-left: 10px;
-        }
+        .kyber-sub-item.kyber-sub label,
         .scourge-sub-item.scourgedex-sub label {
             font-size: 0.75em;
             cursor: pointer;
@@ -645,11 +679,10 @@
 
         input[type="checkbox"] { margin-right: 4px; width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
         label { cursor: pointer; user-select: none; font-size: 0.9em; white-space: nowrap; }
-        
+
         .reset-btn { display: block; margin: 20px auto 0 auto; background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .reset-btn:hover { background-color: #bd2130; }
 
-        /* Custom Confirmation Modal */
         .confirm-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
         .confirm-box { background: white; padding: 24px; border-radius: 8px; max-width: 400px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .confirm-actions { margin-top: 20px; display: flex; justify-content: center; gap: 12px; }
@@ -667,60 +700,64 @@
         <button id="sort-toggle-btn" class="sort-btn" onclick="toggleSort()">🔤 Sort: Alphabetical</button>
     </div>
 
-    <!-- Recipe Ingredient Filter Section -->
-    <div class="ingredient-filter-panel">
-        <div class="ingredient-filter-header">
-            <span class="ingredient-filter-title">🛠️ Filter by Recipe Ingredient:</span>
-            <button class="clear-ingredients-btn" onclick="clearIngredientFilters()">Clear Ingredient Filters</button>
+    <div class="table-responsive">
+        <!-- Recipe Ingredient Filter Section (Constrained strictly to main table width) -->
+        <div class="ingredient-filter-panel">
+            <div class="ingredient-filter-header">
+                <span class="ingredient-filter-title">🛠️ Filter by Recipe Ingredient:</span>
+                <button class="clear-ingredients-btn" onclick="clearIngredientFilters()">Clear Ingredient Filters</button>
+            </div>
+            <div id="ingredient-chips" class="ingredient-chips-container"></div>
         </div>
-        <div id="ingredient-chips" class="ingredient-chips-container"></div>
-    </div>
 
-    <table>
-        <colgroup>
-            <col style="width: 32.5%;">
-            <col span="9" style="width: 7.5%;">
-        </colgroup>
-        <thead>
-            <tr class="stats-row">
-                <th><div id="stat-flawless" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-default" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-gold" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-diamond" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-rainbow" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-beskar" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-galactic" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-stellar" class="header-stats">0/0 (0%)</div></th>
-                <th><div id="stat-kyber" class="header-stats">0/0 (0%)</div></th>
-                <th>
-                    <div id="stat-scourge" class="header-stats">0/0 (0%)</div>
-                    <span id="stat-scourgedex" class="sub-stat-text">Scourgedex: 0/0</span>
-                </th>
-            </tr>
-            <tr class="title-row">
-                <th><span class="header-title">Droid Name</span></th>
-                <th class="th-default filter-header" onclick="toggleFilter('default')" title="Click to filter unchecked"><span class="header-title">Default</span></th>
-                <th class="th-gold filter-header" onclick="toggleFilter('gold')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Gold</span></th>
-                <th class="th-diamond filter-header" onclick="toggleFilter('diamond')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Diamond</span></th>
-                <th class="th-rainbow filter-header" onclick="toggleFilter('rainbow')" title="Click to filter unchecked"><span class="header-title">Rainbow</span></th>
-                <th class="th-beskar filter-header" onclick="toggleFilter('beskar')" title="Click to filter unchecked"><span class="header-title">Beskar</span></th>
-                <th class="th-galactic filter-header" onclick="toggleFilter('galactic')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Galactic</span></th>
-                <th class="th-stellar filter-header" onclick="toggleFilter('stellar')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Stellar</span></th>
-                <th class="th-kyber filter-header" onclick="toggleFilter('kyber')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Kyber</span></th>
-                <th class="th-scourge filter-header" onclick="toggleFilter('scourge')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Scourge</span></th>
-            </tr>
-            <tr class="card-spacer"><td colspan="10"></td></tr>
-        </thead>
-        <tbody id="checklist-table-body"></tbody>
-        <tbody id="completed-header" style="display: none;">
-            <tr class="card-spacer"><td colspan="10"></td></tr>
-            <tr class="section-header-row completed-header-bg">
-                <th colspan="10">Completed Droids</th>
-            </tr>
-            <tr class="card-spacer"><td colspan="10"></td></tr>
-        </tbody>
-        <tbody id="completed-table-body"></tbody>
-    </table>
+        <table>
+            <colgroup>
+                <col class="col-name-head">
+                <col class="col-finish-head" span="7">
+                <col class="col-kyber-head">
+                <col class="col-scourge-head">
+            </colgroup>
+            <thead>
+                <tr class="stats-row">
+                    <th><div id="stat-flawless" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-default" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-gold" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-diamond" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-rainbow" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-beskar" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-galactic" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-stellar" class="header-stats">0/0 (0%)</div></th>
+                    <th><div id="stat-kyber" class="header-stats">0/0 (0%)</div></th>
+                    <th>
+                        <div id="stat-scourge" class="header-stats">0/0 (0%)</div>
+                        <span id="stat-scourgedex" class="sub-stat-text">Scourgedex: 0/0</span>
+                    </th>
+                </tr>
+                <tr class="title-row">
+                    <th><span class="header-title">Droid Name</span></th>
+                    <th class="th-default filter-header" onclick="toggleFilter('default')" title="Click to filter unchecked"><span class="header-title">Default</span></th>
+                    <th class="th-gold filter-header" onclick="toggleFilter('gold')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Gold</span></th>
+                    <th class="th-diamond filter-header" onclick="toggleFilter('diamond')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Diamond</span></th>
+                    <th class="th-rainbow filter-header" onclick="toggleFilter('rainbow')" title="Click to filter unchecked"><span class="header-title">Rainbow</span></th>
+                    <th class="th-beskar filter-header" onclick="toggleFilter('beskar')" title="Click to filter unchecked"><span class="header-title">Beskar</span></th>
+                    <th class="th-galactic filter-header" onclick="toggleFilter('galactic')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Galactic</span></th>
+                    <th class="th-stellar filter-header" onclick="toggleFilter('stellar')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Stellar</span></th>
+                    <th class="th-kyber filter-header" onclick="toggleFilter('kyber')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Kyber</span></th>
+                    <th class="th-scourge filter-header" onclick="toggleFilter('scourge')" title="Click to filter unchecked"><span class="header-title" style="position: relative; z-index: 2;">Scourge</span></th>
+                </tr>
+                <tr class="card-spacer"><td colspan="10"></td></tr>
+            </thead>
+            <tbody id="checklist-table-body"></tbody>
+            <tbody id="completed-header" style="display: none;">
+                <tr class="card-spacer"><td colspan="10"></td></tr>
+                <tr class="section-header-row completed-header-bg">
+                    <th colspan="10">Completed Droids</th>
+                </tr>
+                <tr class="card-spacer"><td colspan="10"></td></tr>
+            </tbody>
+            <tbody id="completed-table-body"></tbody>
+        </table>
+    </div>
 
     <button class="reset-btn" onclick="openResetModal()">Clear All Progress</button>
 
@@ -728,7 +765,6 @@
         <img id="modalImage" src="" alt="Enlarged Droid Photo">
     </div>
 
-    <!-- Custom Confirmation Dialog for Reset -->
     <div id="confirmModal" class="confirm-modal">
         <div class="confirm-box">
             <h3>Clear All Progress?</h3>
@@ -741,7 +777,6 @@
     </div>
 
     <script>
-        // Helper function to resolve default portrait dynamically
         function getDroidImage(droid) {
             return (droid.images && droid.images.default) ? droid.images.default : (droid.image || '');
         }
@@ -861,12 +896,11 @@
 
         const tableBody = document.getElementById('checklist-table-body');
         const completedBody = document.getElementById('completed-table-body');
-        
+
         let currentSort = localStorage.getItem('droidSortPreference') || 'default';
         let activeFilterColumn = null; 
         let selectedIngredients = new Set();
 
-        // Extract unique recipe ingredients dynamically
         function extractUniqueIngredients() {
             const ingredientMap = new Map();
             droids.forEach(d => {
@@ -925,21 +959,21 @@
         droids.forEach((droid, index) => {
             const row = document.createElement('tr');
             row.className = 'main-droid-row';
-            
+
             if (droid.recipe) {
                 row.classList.add('has-fusion');
             }
-            
+
             row.setAttribute('data-index', index); 
             row.setAttribute('data-name', droid.name.toLowerCase()); 
-            
+
             const nameCell = document.createElement('td');
             nameCell.className = 'droid-name-cell';
             const safeDroidId = droid.name.replace(/[^a-zA-Z0-9]/g, '');
             const safeType = droid.type || "Worker";
             const typeImgSrc = typeImages[safeType];
             const primaryImage = getDroidImage(droid);
-            
+
             let sparkleHTML = '';
             if (droid.rarity !== "Iconic") {
                 sparkleHTML = `<span class="sparkle-icon" data-droid="${safeDroidId}" onclick="toggleSparkle(this)">✨</span>`;
@@ -959,16 +993,16 @@
                 </div>
             `;
             row.appendChild(nameCell);
-            
+
             finishes.forEach((finish) => {
                 const cell = document.createElement('td');
                 const finishClass = finish.toLowerCase();
-                
+
                 if (droid.rarity === "Iconic" && finish !== "Default") {
                     cell.className = `checkbox-cell checked-cell`;
                 } else if (finish === "Kyber") {
                     cell.className = `checkbox-cell col-kyber`;
-                    
+
                     const defaultKyberImg = (droid.images && droid.images.kyber) ? droid.images.kyber : primaryImage;
                     const mainId = `${safeDroidId}-kyber`;
                     let hoverRecipeHTML = getHoverRecipeHTML(droid, 'kyber');
@@ -1009,7 +1043,7 @@
                     `;
                 } else if (finish === "Scourge") {
                     cell.className = `checkbox-cell col-scourge`;
-                    
+
                     const imgPath = (droid.images && droid.images.scourge) ? droid.images.scourge : primaryImage;
                     const mainId = `${safeDroidId}-Scourge`;
                     const scourgedexId = `${safeDroidId}-Scourgedex`;
@@ -1027,13 +1061,13 @@
                             </div>
                             <div class="scourge-sub-item scourgedex-sub">
                                 <input type="checkbox" id="${scourgedexId}" onchange="saveProgress(this)">
-                                <label for="${scourgedexId}">Scourgedex</label>
+                                <label for="${scourgedexId}">Submitted?</label>
                             </div>
                         </div>
                     `;
                 } else {
                     cell.className = `checkbox-cell col-${finishClass}`;
-                    
+
                     const imgPath = (droid.images && droid.images[finishClass]) ? droid.images[finishClass] : primaryImage;
                     const uniqueId = `${safeDroidId}-${finish}`;
                     let hoverRecipeHTML = getHoverRecipeHTML(droid, finishClass);
@@ -1051,17 +1085,17 @@
                 }
                 row.appendChild(cell);
             });
-            
+
             tableBody.appendChild(row);
 
             if (droid.recipe) {
                 let formattedRecipe = droid.recipe;
-                
+
                 if (droid.recipe !== "??") {
                     formattedRecipe = droid.recipe.split('+').map(part => {
                         const cleanName = part.trim();
                         const matchingDroid = droids.find(d => d.name.toLowerCase() === cleanName.toLowerCase());
-                        
+
                         if (matchingDroid) {
                             const defaultImg = getDroidImage(matchingDroid);
                             return `${cleanName} <img class="recipe-mini-img" src="${defaultImg}" alt="${cleanName}">`;
@@ -1108,14 +1142,14 @@
 
         function updateStats() {
             const allRows = document.querySelectorAll('#checklist-table-body tr.main-droid-row, #completed-table-body tr.main-droid-row');
-            
+
             let totals = { flawless: 0, default: 0, gold: 0, diamond: 0, rainbow: 0, beskar: 0, galactic: 0, stellar: 0, kyber: 0, scourge: 0, scourgedex: 0 };
             let counts = { flawless: 0, default: 0, gold: 0, diamond: 0, rainbow: 0, beskar: 0, galactic: 0, stellar: 0, kyber: 0, scourge: 0, scourgedex: 0 };
 
             allRows.forEach(row => {
                 const index = row.getAttribute('data-index');
                 if (index === null) return; 
-                
+
                 const droid = droids[index];
                 const isIconic = droid.rarity === "Iconic";
 
@@ -1128,7 +1162,7 @@
                 finishes.forEach(finish => {
                     const finishClass = finish.toLowerCase();
                     if (isIconic && finish !== "Default") return;
-                    
+
                     if (finish === "Kyber") {
                         const kyberCheckboxes = row.querySelectorAll('.col-kyber input[type="checkbox"]');
                         kyberCheckboxes.forEach(cb => {
@@ -1200,8 +1234,7 @@
                 let shouldHide = false;
                 const index = parseInt(row.getAttribute('data-index'));
                 const droid = droids[index];
-                
-                // 1. Column finish filter check
+
                 if (activeFilterColumn) {
                     const cell = row.querySelector('.col-' + activeFilterColumn);
                     if (cell) {
@@ -1215,7 +1248,6 @@
                     }
                 }
 
-                // 2. Ingredient filter check (OR Logic: match any active ingredient)
                 if (!shouldHide && selectedIngredients.size > 0) {
                     if (!droid.recipe || droid.recipe === "??") {
                         shouldHide = true;
@@ -1234,7 +1266,7 @@
                 if (fusionRow) {
                     fusionRow.style.display = shouldHide ? 'none' : 'table-row';
                 }
-                
+
                 const spacerRow = document.getElementById('spacer-row-' + index);
                 if (spacerRow) {
                     spacerRow.style.display = shouldHide ? 'none' : 'table-row';
@@ -1283,7 +1315,7 @@
         function updateCellHighlight(checkbox) {
             const cell = checkbox.closest('.checkbox-cell');
             const checkboxes = cell.querySelectorAll('input[type="checkbox"]');
-            
+
             if (cell.classList.contains('col-scourge')) {
                 const mainCb = cell.querySelector('input[id$="-Scourge"]');
                 if (mainCb && mainCb.checked) {
@@ -1305,7 +1337,7 @@
             const nameCell = row.querySelector('.droid-name-cell');
             const checkboxes = row.querySelectorAll('input[type="checkbox"]');
             const allChecked = checkboxes.length > 0 && Array.from(checkboxes).every(cb => cb.checked);
-            
+
             if (allChecked) {
                 nameCell.classList.add('row-complete');
             } else {
@@ -1356,10 +1388,10 @@
             rows.forEach(row => {
                 tbody.appendChild(row);
                 const index = row.getAttribute('data-index');
-                
+
                 const fusionRow = document.getElementById('fusion-row-' + index);
                 if (fusionRow) tbody.appendChild(fusionRow);
-                
+
                 const spacerRow = document.getElementById('spacer-row-' + index);
                 if (spacerRow) tbody.appendChild(spacerRow);
             });
@@ -1397,7 +1429,7 @@
                 checkRowCompletionStyle(row);
                 placeRow(row);
             });
-            
+
             sortSection(tableBody);
             sortSection(completedBody);
             applyFilter(); 
@@ -1414,10 +1446,10 @@
 
         function confirmClearProgress() {
             const savedSort = localStorage.getItem('droidSortPreference');
-            
+
             localStorage.clear();
             if (savedSort) localStorage.setItem('droidSortPreference', savedSort);
-            
+
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(cb => {
                 cb.checked = false;
@@ -1428,7 +1460,7 @@
             sparkles.forEach(icon => {
                 icon.classList.remove('active');
             });
-            
+
             clearIngredientFilters();
 
             const droidRows = document.querySelectorAll('tr.main-droid-row');
@@ -1436,7 +1468,7 @@
                 checkRowCompletionStyle(row);
                 placeRow(row);
             });
-            
+
             applyFilter();
             updateStats();
             closeResetModal();
