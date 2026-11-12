@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fortnite Droid Build Checklist</title>
     <style>
-    @import url('https://fonts.cdnfonts.com/css/hogira');
-    @import url('https://fonts.cdnfonts.com/css/baz-2');
+    @import url('https://fonts.cdnfonts.com/css/gemunu-libre');
 
         * {
             box-sizing: border-box;
@@ -17,7 +16,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Hogira", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Gemunu Libre Medium", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f4f4f9;
             color: #333;
             width: max-content;
@@ -27,7 +26,7 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow-x: auto;
+            overflow: visible;
             text-align: center;
         }
         .header-banner {
@@ -47,7 +46,7 @@
             text-align: center;
             color: #666;
             margin-bottom: 20px;
-            font-size: 0.9em;
+            font-size: 1em;
         }
         .top-controls {
             display: flex;
@@ -62,7 +61,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 0.9em;
+            font-size: 1em;
             transition: background-color 0.2s ease;
         }
         .sort-btn:hover { background-color: #5a6268; }
@@ -142,9 +141,8 @@
             padding: 4px 10px 4px 6px;
             border-radius: 20px;
             cursor: pointer;
-            font-family: 'baz', sans-serif;
             letter-spacing: 1px;
-            font-size: 1.3em;
+            font-size: 0.9em;
             font-weight: 600;
             user-select: none;
             transition: all 0.2s ease;
@@ -214,14 +212,14 @@
         }
         .header-stats {
             display: block;
-            font-size: 0.8em; 
+            font-size: 1em; 
             font-weight: 600;
             color: #111; 
             letter-spacing: 0.5px;
         }
         .sub-stat-text {
             display: block;
-            font-size: 0.75em;
+            font-size: 0.9em;
             color: #666;
             margin-top: 2px;
         }
@@ -329,7 +327,7 @@
         .filter-header { cursor: pointer; user-select: none; transition: opacity 0.2s ease; }
         .filter-header:hover { opacity: 0.85; }
         .filter-active { box-shadow: inset 0 -4px 0 rgba(255, 255, 255, 0.8); text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
-        .filter-active::after { content: ' 🔍'; font-size: 0.8em; position: absolute; top: 5px; right: 5px;}
+        .filter-active::after { content: ' 🔍'; font-size: 0.9em; position: absolute; top: 5px; right: 5px;}
 
         /* Card Spacer */
         .card-spacer td {
@@ -379,9 +377,8 @@
 
         .fusion-recipe-text {
             display: inline-block;
-            font-size: 1.3em;
+            font-size: 1.1em;
             color: #111;
-            font-family: 'baz', sans-serif; letter-spacing: 1px;
             display: flex; 
             align-items: center; 
             justify-content: center;
@@ -408,7 +405,7 @@
         }
         td.droid-name-cell:hover { z-index: 999; }
         .droid-name-wrapper { display: flex; align-items: center; white-space: nowrap; position: relative; z-index: 1; overflow: visible; }
-        .droid-name-text { font-family: 'baz', sans-serif; letter-spacing: 1px; font-size: 1.4em; white-space: nowrap; }
+        .droid-name-text { font-family: 'Gemunu Libre Medium', sans-serif; letter-spacing: 1px; font-size: 1.25em; white-space: nowrap; }
 
         .droid-meta-container {
             display: flex;
@@ -445,7 +442,7 @@
             border-radius: 4px; 
             flex-shrink: 0; 
             text-align: center; 
-            font-size: 0.65em; 
+            font-size: 0.85em; 
             font-weight: 800; 
             text-transform: uppercase; 
             letter-spacing: 0.5px; 
@@ -493,7 +490,24 @@
         }
         .checkbox-container:hover .variant-hover-container,
         .kyber-sub-item:hover .variant-hover-container,
-        .scourge-sub-item:hover .variant-hover-container { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .scourge-sub-item:hover .variant-hover-container { 
+            opacity: 1; 
+            visibility: visible; 
+            transform: translateX(-50%) translateY(0); 
+        }
+
+        /* Keep rightmost column popups inside the screen */
+        .col-kyber .variant-hover-container,
+        .col-scourge .variant-hover-container {
+            left: auto;
+            right: 0;
+            transform: translateY(10px);
+        }
+
+        .col-kyber .kyber-sub-item:hover .variant-hover-container,
+        .col-scourge .scourge-sub-item:hover .variant-hover-container {
+            transform: translateY(0);
+        }
 
         .variant-hover-container.col-default { background: linear-gradient(135deg, #5c6670 0%, #838e96 40%, #464f57 100%); }
         .variant-hover-container.col-gold { background: linear-gradient(135deg, #7a3a00 0%, #b86e00 20%, #ffc800 45%, #ffea80 50%, #ffb800 65%, #995c00 85%, #522800 100%); }
@@ -579,7 +593,7 @@
         .hover-recipe-plus {
             color: #fff;
             font-weight: 900;
-            font-size: 1.5em;
+            font-size: 1em;
             text-shadow: 0 0 8px rgba(255,255,255,1), 0 0 4px rgba(255,255,255,0.8);
         }
 
@@ -636,7 +650,7 @@
             width: fit-content;
             margin: 0 auto;
             padding: 2px 0;
-            font-size: 0.9em;
+            font-size: 1em;
             white-space: nowrap;
         }
         .kyber-sub-item, .scourge-sub-item {
@@ -663,7 +677,7 @@
 
         .kyber-sub-item.kyber-main label,
         .scourge-sub-item.scourge-main label {
-            font-size: 0.9em;
+            font-size: 1em;
             font-weight: normal;
             cursor: pointer;
             user-select: none;
@@ -671,14 +685,14 @@
         }
         .kyber-sub-item.kyber-sub label,
         .scourge-sub-item.scourgedex-sub label {
-            font-size: 0.75em;
+            font-size: 0.8em;
             cursor: pointer;
             user-select: none;
             white-space: nowrap;
         }
 
         input[type="checkbox"] { margin-right: 4px; width: 14px; height: 14px; cursor: pointer; flex-shrink: 0; }
-        label { cursor: pointer; user-select: none; font-size: 0.9em; white-space: nowrap; }
+        label { cursor: pointer; user-select: none; font-size: 1em; white-space: nowrap; }
 
         .reset-btn { display: block; margin: 20px auto 0 auto; background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         .reset-btn:hover { background-color: #bd2130; }
